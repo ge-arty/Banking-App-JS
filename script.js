@@ -76,6 +76,39 @@ const displayMovements = function (movements) {
 };
 displayMovements(account1.movements);
 
+const calcDisplayPrintBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${balance} EUR`;
+};
+calcDisplayPrintBalance(account1.movements);
+
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter(mov => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}EUR`;
+  const outcomes = movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(outcomes)}EUR`;
+  const interest = movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * 1.2) / 100)
+    .filter(interests => interests >= 1)
+    .reduce((acc, dep) => acc + dep, 0);
+  labelSumInterest.textContent = `${interest}EUR`;
+};
+calcDisplaySummary(account1.movements);
+const createUsernames = function (accs) {
+  accs.forEach(function (acc) {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map(name => name[0])
+      .join('');
+  });
+};
+createUsernames(accounts);
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -89,3 +122,23 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+const doggAgeArr = [5, 2, 4, 1, 15, 8, 3];
+const calcAverageHumanAge = function (ages) {
+  const humanAgeArr = ages.map(dogg => {
+    if (dogg <= 2) {
+      return dogg * 2;
+    }
+    if (dogg > 2) {
+      return 16 + dogg * 4;
+    }
+  });
+  const lessThanEighteen = humanAgeArr.filter(ages => {
+    return ages >= 18;
+  });
+  console.log(lessThanEighteen);
+  const adultDoggAvg =
+    lessThanEighteen.reduce((acc, cur) => acc + cur, 0) /
+    lessThanEighteen.length;
+  console.log(adultDoggAvg);
+};
+calcAverageHumanAge(doggAgeArr);
