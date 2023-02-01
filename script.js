@@ -75,9 +75,10 @@ const displayMovements = function (movements) {
   });
 };
 
-const calcDisplayPrintBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} EUR`;
+const calcDisplayPrintBalance = function (acc) {
+  console.log(acc);
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance} EUR`;
 };
 
 const calcDisplaySummary = function (acc) {
@@ -107,6 +108,11 @@ const createUsernames = function (accs) {
   });
 };
 createUsernames(accounts);
+const updateUI = function (acc) {
+  displayMovements(acc.movements);
+  calcDisplayPrintBalance(acc);
+  calcDisplaySummary(acc);
+};
 // event handler
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
@@ -123,11 +129,42 @@ btnLogin.addEventListener('click', function (e) {
   }
   inputLoginUsername.value = inputLoginPin.value = '';
   inputLoginPin.blur();
-  displayMovements(currentAccount.movements);
-  calcDisplayPrintBalance(currentAccount.movements);
-  calcDisplaySummary(currentAccount);
+  updateUI(currentAccount);
+});
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAcc = accounts.find(
+    acc => acc.username === inputTransferTo.value
+  );
+  inputTransferAmount.value = inputTransferTo.value = '';
+  if (
+    amount > 0 &&
+    receiverAcc &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+    updateUI(currentAccount);
+  }
 });
 
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      acc => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+    containerApp.style.opacity = 0;
+  }
+  inputCloseUsername.value = inputClosePin.value = '';
+  labelWelcome.textContent = 'Log in to get started';
+});
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -141,23 +178,3 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
-const doggAgeArr = [5, 2, 4, 1, 15, 8, 3];
-const calcAverageHumanAge = function (ages) {
-  const humanAgeArr = ages.map(dogg => {
-    if (dogg <= 2) {
-      return dogg * 2;
-    }
-    if (dogg > 2) {
-      return 16 + dogg * 4;
-    }
-  });
-  const lessThanEighteen = humanAgeArr.filter(ages => {
-    return ages >= 18;
-  });
-  console.log(lessThanEighteen);
-  const adultDoggAvg =
-    lessThanEighteen.reduce((acc, cur) => acc + cur, 0) /
-    lessThanEighteen.length;
-  console.log(adultDoggAvg);
-};
-calcAverageHumanAge(doggAgeArr);
