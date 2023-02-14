@@ -174,7 +174,6 @@ btnClose.addEventListener('click', function (e) {
     containerApp.style.opacity = 0;
   }
   inputCloseUsername.value = inputClosePin.value = '';
-  labelWelcome.textContent = 'Log in to get started';
 });
 let sorted = false;
 btnSort.addEventListener('click', function (e) {
@@ -195,21 +194,3 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
-const dogs = [
-  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
-  { weight: 8, curFood: 200, owners: ['Matilda'] },
-  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
-  { weight: 32, curFood: 340, owners: ['Michael'] },
-];
-dogs.forEach(dogg => {
-  dogg.recommendedFood = Math.trunc(dogg.weight ** 0.75 * 28);
-});
-console.log(dogs);
-const dogSarah = dogs.find(dog => dog.owners.includes('Sarah'));
-const ownersEatTooMuch = dogs.filter(dog => dog.recommendedFood < dog.curFood);
-const ownersEatTooLittle = dogs
-  .filter(dog => dog.recommendedFood > dog.curFood)
-  .map(dog => dog.owners)
-  .flat();
-
-console.log(ownersEatTooLittle);
