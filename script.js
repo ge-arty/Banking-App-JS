@@ -172,6 +172,8 @@ btnClose.addEventListener('click', function (e) {
     );
     accounts.splice(index, 1);
     containerApp.style.opacity = 0;
+  } else {
+    (' ');
   }
   inputCloseUsername.value = inputClosePin.value = '';
 });
